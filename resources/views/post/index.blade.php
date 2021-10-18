@@ -23,6 +23,7 @@
             <th>Descripción</th>
             <th>imagenes</th>
             <th>Video</th>
+            <th>Categoria</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -36,6 +37,9 @@
             <td>{{ $post->description }}</td>
             <td>{{ $post->image }}</td>
             <td>{{ $post->video }}</td>
+           
+            <td>{{ $post->categories->category }}</td>
+
             <td>
                 <a class="btn btn-primary" href="{{ route('post.edit',$post) }}" >Editar</a>
                 <form action="{{ route('post.destroy',$post)}}" method="post" class="d-inline">|

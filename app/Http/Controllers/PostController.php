@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $datos['posts'] = Post::paginate(5);
+        $datos['posts'] = Post::all();
         
         return view('post.index',$datos);
     }
@@ -78,13 +78,15 @@ class PostController extends Controller
     {
         $id = auth()->user()->id;
         $user_id = User::where('id','=',$post->users_id)->first()->id;
+        $user_name = User::where('id','=',$post->users_id)->first()->name;
+
         $categories = Category::pluck('category','id');
         if ($id == $user_id){
             return view('post.edit', ['post'=>$post,
             'user_id'=>$id,'categories'=>$categories]);
         }
         else {
-            return redirect()->route('post.index')->with('mensaje','Este post fue creado por otro usuario');
+            return redirect()->route('post.index')->with('mensaje','Este post fue creado por '.$user_name);
         }
 
     }
@@ -114,15 +116,17 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post = Post::findOrfail($post->id);
+        return $post;
         $id = auth()->user()->id;
         $us_id = User::where('id','=',$post->users_id)->first()->id;
+        $user_name = User::where('id','=',$post->users_id)->first()->name;
 
         if($id == $us_id) {
             Post::destroy($post->id);
             return redirect()->route('post.index');
         }
         else {
-            return redirect()->route('post.index')->with('mensaje','Este post fue creado por otro usuario');
+            return redirect()->route('post.index')->with('mensaje','Este post fue creado por '.$user_name);
         }
     }
     

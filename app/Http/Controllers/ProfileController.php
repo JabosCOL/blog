@@ -70,13 +70,14 @@ class ProfileController extends Controller
     {
         $id = auth()->user()->id;        
         $user_id = User::where('id','=',$profile->users_id)->first()->id;
+        $user_name = User::where('id','=',$profile->users_id)->first()->name;
         
         if ($id == $user_id){
             return view('profile.edit', ['profile'=>$profile,
             'id'=>$id]);
         }
         else {
-            return redirect()->route('profile.index')->with('mensaje','Este perfil fue creado por otro usuario');
+            return redirect()->route('profile.index')->with('mensaje','Este perfil fue creado por '.$user_name);
         }
     }
 
@@ -107,12 +108,14 @@ class ProfileController extends Controller
         $profile = Profile::findOrfail($profile->id);
         $id = auth()->user()->id;
         $us_id = User::where('id','=',$profile->users_id)->first()->id;
+        $user_name = User::where('id','=',$profile->users_id)->first()->name;
+
         if($id == $us_id) {
             Profile::destroy($id);
             return redirect()->route('profile.index');
         }
         else {
-            return redirect()->route('profile.index')->with('mensaje','Este perfil fue creado por otro usuario');
+            return redirect()->route('profile.index')->with('mensaje','Este perfil fue creado por '.$user_name);
         }
     }
 }
